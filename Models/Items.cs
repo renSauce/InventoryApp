@@ -3,7 +3,7 @@ namespace InventoryApp.Models
 {
     public enum MeasurementUnit { Piece, Kilogram }
 
-    // Primary constructor on an abstract class
+    // Parent item
     public abstract class Item(string name, decimal pricePerUnit) : IEquatable<Item>
     {
         public string Name { get; } = name;
@@ -19,7 +19,7 @@ namespace InventoryApp.Models
         public override string ToString() => Name;
     }
 
-    // Derived types also with primary constructors
+    // Child items
     public sealed class UnitItem(string name, decimal pricePerUnit, double weightKgPerPiece = 0)
         : Item(name, pricePerUnit)
     {
