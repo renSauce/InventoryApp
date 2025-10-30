@@ -13,6 +13,7 @@
   <StackPanel Margin="10" Spacing="8">
     <StackPanel Orientation="Horizontal" Spacing="12">
       <Button Content="Process next order" Click="ProcessNextOrder_OnClick" />
+      <Button Content="Process with robot" Click="ProcessWithRobot_OnClick" />
       <TextBlock Text="Total revenue:" VerticalAlignment="Center" />
       <TextBlock x:Name="RevenueText" Text="0.00 Kr" FontWeight="Bold" VerticalAlignment="Center" />
     </StackPanel>

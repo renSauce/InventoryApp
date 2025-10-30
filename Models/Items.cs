@@ -9,6 +9,8 @@ namespace InventoryApp.Models
         public string Name { get; } = name;
         public decimal PricePerUnit { get; } = pricePerUnit;
 
+        public uint InventoryLocation { get; set; }  
+
         public bool Equals(Item? other) =>
             other is not null && GetType() == other.GetType() && Name == other.Name;
 
@@ -31,4 +33,6 @@ namespace InventoryApp.Models
     {
         public MeasurementUnit MeasurementUnit { get; } = unit;
     }
+
+     
 }

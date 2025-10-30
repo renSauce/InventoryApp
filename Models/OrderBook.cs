@@ -1,4 +1,6 @@
 using System.Collections.ObjectModel;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace InventoryApp.Models
 {
@@ -28,5 +30,21 @@ namespace InventoryApp.Models
         }
 
         public decimal TotalRevenue() => _totalRevenue;
+
+        public IReadOnlyList<OrderLine>? ProcessNextOrderAndReturnLines()
+        {
+            if (QueuedOrders.Count == 0) return null;
+            var order = QueuedOrders[0];
+            if (!_inventory.CanFulfill(order)) return null;
+
+            _inventory.Deduct(order);
+            QueuedOrders.RemoveAt(0);
+            ProcessedOrders.Add(order);
+            _totalRevenue += order.TotalPrice();
+
+            return order.OrderLines;
+        }
     }
+
+
 }
