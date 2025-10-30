@@ -1,6 +1,3 @@
-# Inventory System + Item Sorter Robot – Class Diagram
-
-```mermaid
 classDiagram
     direction TB
 
@@ -37,9 +34,18 @@ classDiagram
 
     class Customer { +string Name +List~Order~ Orders +CreateOrder(OrderBook,Order) void }
 
-    class Robot { +SendUrscript(string) void }
-    class ItemSorterRobot { +PickUp(uint) void +UrscriptTemplate$ string }
+    class Robot {
+        +string RobotIpAddress
+        +string ControlBoxIpAddress
+        +SendUrscript(string) void
+    }
+
+    class ItemSorterRobot {
+        +PickUp(uint) void
+        +UrscriptTemplate$ string
+    }
     Robot <|-- ItemSorterRobot
 
     OrderBook --> Inventory
     Customer --> Order
+    MainWindow --> ItemSorterRobot : sets IPs from GUI

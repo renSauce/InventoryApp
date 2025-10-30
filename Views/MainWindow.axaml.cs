@@ -61,33 +61,30 @@ namespace InventoryApp.Views
 
         public async void ProcessWithRobot_OnClick(object? sender, RoutedEventArgs e)
         {
-            // Process the next order AND get its lines for the robot
             var lines = OrderBook.ProcessNextOrderAndReturnLines();
-            if (lines is null || lines.Count == 0)
-                return;
+            if (lines is null || lines.Count == 0) return;
 
-            var robot = new ItemSorterRobot();
+            var robot = new ItemSorterRobot
+            {
+                // UR controller - Programmet starter med localhost, så de bliver ikke 0, medmindre man skriver 0?
+                RobotIpAddress = RobotIpText.Text,
+                // OnRobot control box
+                ControlBoxIpAddress = ControlBoxIpText.Text
+            };
 
             foreach (var line in lines)
             {
-
                 for (var i = 0; i < (int)Math.Ceiling(line.Quantity); i++)
                 {
-                    try
-                    {
-                        robot.PickUp(line.Item.InventoryLocation);
-                    }
-                    catch
-                    {
-                    }
-                    //Task delay, so simulator works
+                    try { robot.PickUp(line.Item.InventoryLocation); }
+                    catch { }
                     await Task.Delay(9500);
                 }
             }
 
-
             RevenueText.Text = $"{OrderBook.TotalRevenue():C}";
         }
+
 
     }
 }

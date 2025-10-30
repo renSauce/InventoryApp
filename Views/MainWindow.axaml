@@ -14,6 +14,10 @@
     <StackPanel Orientation="Horizontal" Spacing="12">
       <Button Content="Process next order" Click="ProcessNextOrder_OnClick" />
       <Button Content="Process with robot" Click="ProcessWithRobot_OnClick" />
+      <TextBlock Text="UR IP:" VerticalAlignment="Center" />
+      <TextBox x:Name="RobotIpText" Width="140" Text="localhost" />
+      <TextBlock Text="Gripper IP:" VerticalAlignment="Center" />
+      <TextBox x:Name="ControlBoxIpText" Width="140" Text="localhost" />
       <TextBlock Text="Total revenue:" VerticalAlignment="Center" />
       <TextBlock x:Name="RevenueText" Text="0.00 Kr" FontWeight="Bold" VerticalAlignment="Center" />
     </StackPanel>
