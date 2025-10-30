@@ -8,3 +8,5 @@ Furthermore the user can change the IP adresses trough inputs in the GUI.
 !IMPORTANT! - THE PROGRAM HAS NOT BEEN TESTED!
 Therefore there is no VIDEO.
 
+
+<img width="761" height="715" alt="image" src="https://github.com/user-attachments/assets/f1479eda-a760-419e-abcb-dd462f9e38db" />
