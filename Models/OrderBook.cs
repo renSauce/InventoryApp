@@ -1,18 +1,14 @@
-using System.Collections.ObjectModel;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace InventoryApp.Models
 {
-    public sealed class OrderBook
+    public class OrderBook
     {
-        public ObservableCollection<Order> QueuedOrders { get; } = [];
-        public ObservableCollection<Order> ProcessedOrders { get; } = [];
+        public int Id { get; set; }
+        public List<Order> QueuedOrders { get; set; } = new();
+        public List<Order> ProcessedOrders { get; set; } = new();
 
-        private readonly Inventory _inventory;
-        private decimal _totalRevenue;
+        private Inventory _inventory = new();
 
-        public OrderBook(Inventory inventory) => _inventory = inventory;
+        public void AttachInventory(Inventory inv) => _inventory = inv;
 
         public void QueueOrder(Order order) => QueuedOrders.Add(order);
 
@@ -20,31 +16,39 @@ namespace InventoryApp.Models
         {
             if (QueuedOrders.Count == 0) return false;
             var order = QueuedOrders[0];
-            if (!_inventory.CanFulfill(order)) return false;
 
-            _inventory.Deduct(order);
+            // check stock in the attached, tracked inventory
+            foreach (var line in order.OrderLines)
+            {
+                var item = _inventory.Stock.First(i => i.Id == line.ItemId);
+                if (item.Quantity < (decimal)line.Quantity) return false;
+            }
+
+            // deduct
+            foreach (var line in order.OrderLines)
+            {
+                var item = _inventory.Stock.First(i => i.Id == line.ItemId);
+                item.Quantity -= (decimal)line.Quantity;
+            }
+
             QueuedOrders.RemoveAt(0);
+            order.QueuedOrderBook = null;
+            order.QueuedOrderBookId = null;
+
             ProcessedOrders.Add(order);
-            _totalRevenue += order.TotalPrice();
+            order.ProcessedOrderBook = this;
+            order.ProcessedOrderBookId = this.Id;
+
             return true;
         }
 
-        public decimal TotalRevenue() => _totalRevenue;
-
-        public IReadOnlyList<OrderLine>? ProcessNextOrderAndReturnLines()
+        public List<OrderLine>? ProcessNextOrderAndReturnLines()
         {
-            if (QueuedOrders.Count == 0) return null;
-            var order = QueuedOrders[0];
-            if (!_inventory.CanFulfill(order)) return null;
-
-            _inventory.Deduct(order);
-            QueuedOrders.RemoveAt(0);
-            ProcessedOrders.Add(order);
-            _totalRevenue += order.TotalPrice();
-
-            return order.OrderLines;
+            if (!ProcessNextOrder()) return null;
+            return ProcessedOrders.Last().OrderLines;
         }
+
+        public decimal TotalRevenue => ProcessedOrders.Sum(o => o.Total);
+        public decimal TotalRevenueLegacy() => TotalRevenue; 
     }
-
-
 }

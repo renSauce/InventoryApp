@@ -1,38 +1,25 @@
-
 namespace InventoryApp.Models
 {
     public enum MeasurementUnit { Piece, Kilogram }
 
-    // Parent item
-    public abstract class Item(string name, decimal pricePerUnit) : IEquatable<Item>
+    public abstract class Item
     {
-        public string Name { get; } = name;
-        public decimal PricePerUnit { get; } = pricePerUnit;
-
-        public uint InventoryLocation { get; set; }  
-
-        public bool Equals(Item? other) =>
-            other is not null && GetType() == other.GetType() && Name == other.Name;
-
-        public override bool Equals(object? obj) => Equals(obj as Item);
-
-        public override int GetHashCode() => (Name, GetType()).GetHashCode();
+        public int Id { get; set; }               
+        public string Name { get; set; } = "";    
+        public decimal PricePerUnit { get; set; }
+        public uint InventoryLocation { get; set; }
+        public decimal Quantity { get; set; }     
 
         public override string ToString() => Name;
     }
 
-    // Child items
-    public sealed class UnitItem(string name, decimal pricePerUnit, double weightKgPerPiece = 0)
-        : Item(name, pricePerUnit)
+    public sealed class UnitItem : Item
     {
-        public double Weight { get; } = weightKgPerPiece;
+        public decimal Weight { get; set; }
     }
 
-    public sealed class BulkItem(string name, decimal pricePerUnit, MeasurementUnit unit)
-        : Item(name, pricePerUnit)
+    public sealed class BulkItem : Item
     {
-        public MeasurementUnit MeasurementUnit { get; } = unit;
+        public string MeasurementUnit { get; set; } = "";
     }
-
-     
 }

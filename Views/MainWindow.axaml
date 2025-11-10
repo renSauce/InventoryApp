@@ -1,56 +1,57 @@
 <Window xmlns="https://github.com/avaloniaui"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:vm="clr-namespace:InventoryApp.ViewModels"
   x:Class="InventoryApp.Views.MainWindow"
-  Width="900" Height="520"
-  Title="Inventory System"
-  x:CompileBindings="False">
-
-  <Design.DataContext>
-    <vm:MainViewModel />
-  </Design.DataContext>
+  Title="Inventory System">
 
   <StackPanel Margin="10" Spacing="8">
+
+    <!-- Buttons and robot controls -->
     <StackPanel Orientation="Horizontal" Spacing="12">
       <Button Content="Process next order" Click="ProcessNextOrder_OnClick" />
       <Button Content="Process with robot" Click="ProcessWithRobot_OnClick" />
-      <TextBlock Text="UR IP:" VerticalAlignment="Center" />
-      <TextBox x:Name="RobotIpText" Width="140" Text="localhost" />
-      <TextBlock Text="Gripper IP:" VerticalAlignment="Center" />
-      <TextBox x:Name="ControlBoxIpText" Width="140" Text="localhost" />
-      <TextBlock Text="Total revenue:" VerticalAlignment="Center" />
-      <TextBlock x:Name="RevenueText" Text="0.00 Kr" FontWeight="Bold" VerticalAlignment="Center" />
+
+      <TextBlock Text="UR IP:" />
+      <TextBox x:Name="RobotIpText" Width="100" Text="localhost" />
+
+      <TextBlock Text="Gripper IP:" />
+      <TextBox x:Name="ControlBoxIpText" Width="100" Text="localhost" />
+
+      <TextBlock Text="Total revenue:" />
+      <TextBlock x:Name="RevenueText" FontWeight="Bold" />
     </StackPanel>
 
-    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto">
+    <!-- STACKPANEL -->
+    <StackPanel Orientation="Horizontal" Spacing="20">
 
-      <StackPanel Grid.Column="0" Spacing="4">
-        <TextBlock Text="Queued Orders" FontWeight="SemiBold" />
-        <DataGrid ItemsSource="{Binding OrderBook.QueuedOrders}"
-          AutoGenerateColumns="False" Height="180">
+      <!-- Left column -->
+      <StackPanel Width="700">
+        <TextBlock Text="Queued Orders" FontWeight="Bold" />
+        <DataGrid ItemsSource="{Binding OrderBook.QueuedOrders}" AutoGenerateColumns="False"
+          Height="200">
           <DataGrid.Columns>
             <DataGridTextColumn Header="Time" Binding="{Binding Time}" Width="180" />
             <DataGridTextColumn Header="Items" Binding="{Binding Summary}" Width="*" />
-            <DataGridTextColumn Header="Total"
-              Binding="{Binding Total, StringFormat={}{0:C}}"
-              Width="120" />
+            <DataGridTextColumn Header="Customer" Binding="{Binding Customer}" Width="*"/>
+            <DataGridTextColumn Header="Total" Binding="{Binding Total}" Width="120" />
           </DataGrid.Columns>
         </DataGrid>
       </StackPanel>
 
-      <StackPanel Grid.Column="1" Spacing="4">
-        <TextBlock Text="Processed Orders" FontWeight="SemiBold" />
-        <DataGrid ItemsSource="{Binding OrderBook.ProcessedOrders}"
-          AutoGenerateColumns="False" Height="180">
+      <!-- Right column -->
+      <StackPanel Width="700">
+        <TextBlock Text="Processed Orders" FontWeight="Bold" />
+        <DataGrid ItemsSource="{Binding OrderBook.ProcessedOrders}" AutoGenerateColumns="False"
+          Height="200">
           <DataGrid.Columns>
             <DataGridTextColumn Header="Time" Binding="{Binding Time}" Width="180" />
             <DataGridTextColumn Header="Items" Binding="{Binding Summary}" Width="*" />
-            <DataGridTextColumn Header="Total"
-              Binding="{Binding Total, StringFormat={}{0:C}}"
-              Width="120" />
+            <DataGridTextColumn Header="Customer" Binding="{Binding Customer}" Width="*"/>
+            <DataGridTextColumn Header="Total" Binding="{Binding Total}" Width="120" />
           </DataGrid.Columns>
         </DataGrid>
       </StackPanel>
-    </Grid>
+
+    </StackPanel>
+
   </StackPanel>
 </Window>
